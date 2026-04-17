@@ -18,6 +18,8 @@ services:
       - DB_DATABASE=${DB_DATABASE:-uee_db}
     networks:
       - default
+    depends_on:
+      - postgresql
   postgresql:
     restart: unless-stopped
     image: postgres:18-trixie

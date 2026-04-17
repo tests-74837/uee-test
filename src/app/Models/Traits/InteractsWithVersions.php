@@ -14,6 +14,16 @@ trait InteractsWithVersions
 
     private abstract function getAttributes();
 
+    public abstract function hasMany($related, $foreignKey = null, $localKey = null);
+
+    public abstract function hasOne($related, $foreignKey = null, $localKey = null);
+
+    public abstract function getKey();
+
+    public abstract function save(array $options = []);
+
+    public abstract function setRelation($relation, $value);
+
     private abstract function getVersionModelClass(): string;
 
     public function versions(): HasMany
@@ -55,7 +65,7 @@ trait InteractsWithVersions
             return false;
         }
 
-        $result = parent::save($options);
+        $result = $this->save($options);
 
         $versionModel->setVersion($currentVersion ? $currentVersion->version + 1 : 1);
         $versionModel->instance()->associate($this);
