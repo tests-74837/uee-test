@@ -1,0 +1,33 @@
+services:
+  app:
+    restart: unless-stopped
+    init: true
+    build:
+      context: ./
+      dockerfile: ./docker/Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - ./src:/var/www
+      - ./data/app:/data
+    environment:
+      - DB_HOST=${DB_HOST:-postgresql}
+      - DB_PORT=${DB_PORT:-5432}
+      - DB_PASSWORD=${DB_PASSWORD:-password}
+      - DB_USERNAME=${DB_USERNAME:-uee_user}
+      - DB_DATABASE=${DB_DATABASE:-uee_db}
+    networks:
+      - default
+  postgresql:
+    restart: unless-stopped
+    image: postgres:18-trixie
+    environment:
+      - POSTGRES_DB={DB_DATABASE:-uee_db}
+      - POSTGRES_USER=${DB_USERNAME:-uee_user}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-password}
+    volumes:
+      - ./data/db:/var/lib/postgresql/
+    networks:
+      - default
+networks:
+  default:

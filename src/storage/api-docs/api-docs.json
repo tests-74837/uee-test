@@ -1,0 +1,159 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "UEE API",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/v1/companies/{edrpou}/versions": {
+            "get": {
+                "tags": [
+                    "Companies"
+                ],
+                "summary": "Get company data versions by edrpou",
+                "operationId": "01ae02c2a46e44546c015080e1f7a4cb",
+                "parameters": [
+                    {
+                        "name": "edrpou",
+                        "in": "path",
+                        "description": "Company EDRPOU code",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "37027819"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Company created or updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/CompanyVersionResource"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Record not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/companies": {
+            "post": {
+                "tags": [
+                    "Companies"
+                ],
+                "summary": "Create or update a company",
+                "operationId": "7574eb241cb676652292762d3c55b4f2",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreCompanyRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Company created or updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CompanyResource"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "StoreCompanyRequest": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "ТОВ Українська енергетична біржа",
+                        "nullable": false
+                    },
+                    "edrpou": {
+                        "type": "string",
+                        "example": "37027819",
+                        "nullable": false
+                    },
+                    "address": {
+                        "type": "string",
+                        "example": "01001, Україна, м. Київ, вул. Хрещатик, 44",
+                        "nullable": false
+                    }
+                },
+                "type": "object"
+            },
+            "CompanyResource": {
+                "properties": {
+                    "status": {
+                        "description": "request status",
+                        "type": "string",
+                        "nullable": false,
+                        "enum": [
+                            "created",
+                            "updated",
+                            "duplicate"
+                        ]
+                    },
+                    "id": {
+                        "description": "company id",
+                        "type": "integer",
+                        "nullable": false
+                    },
+                    "version": {
+                        "description": "data version",
+                        "type": "integer",
+                        "nullable": false
+                    }
+                },
+                "type": "object"
+            },
+            "CompanyVersionResource": {
+                "properties": {
+                    "version": {
+                        "description": "data version",
+                        "type": "integer",
+                        "example": 1,
+                        "nullable": false
+                    },
+                    "name": {
+                        "description": "company name",
+                        "type": "string",
+                        "nullable": false
+                    },
+                    "address": {
+                        "description": "company address",
+                        "type": "string",
+                        "nullable": false
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Companies",
+            "description": "Companies"
+        }
+    ]
+}
